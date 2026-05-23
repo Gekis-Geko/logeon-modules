@@ -1,0 +1,261 @@
+<section data-admin-page="narrative-states">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3 mt-3">
+        <header>
+            <h4 class="display-6 mb-1">Logeon Narrative States</h4>
+            <h6 class="mb-0">Preset narrativi composti, kit di stati core e assegnazioni ai personaggi.</h6>
+        </header>
+        <div class="d-flex flex-wrap gap-2">
+            <button type="button" class="btn btn-sm btn-outline-primary" data-action="lfns-admin-reload">
+                <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+            </button>
+        </div>
+    </div>
+
+    <div class="alert alert-warning">
+        Il core continua a possedere il dominio `narrative-states`. Questo modulo aggiunge un layer
+        di <b>preset composti</b> che orchestrano stati core gia esistenti, senza toccare il CRUD core.
+    </div>
+
+    <div class="row g-3">
+        <div class="col-12 col-xl-6">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Preset</h6>
+                    <span class="small text-muted">Definizione modulo</span>
+                </div>
+                <div class="card-body">
+                    <form id="lfns-preset-form" class="row g-3">
+                        <input type="hidden" name="id" value="0">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Nome</label>
+                            <input type="text" class="form-control" name="name" maxlength="120" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Slug</label>
+                            <input type="text" class="form-control" name="slug" maxlength="120" placeholder="facoltativo">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Descrizione</label>
+                            <textarea class="form-control" name="description" rows="3" maxlength="1500"></textarea>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Target</label>
+                            <select class="form-select" name="target_type">
+                                <option value="character">Personaggio</option>
+                                <option value="scene">Scena</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Tag categoria</label>
+                            <input type="text" class="form-control" name="category_label" maxlength="80" placeholder="scena, quest, rito...">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Ordine</label>
+                            <input type="number" class="form-control" name="sort_order" value="100">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Visibile ai player</label>
+                            <select class="form-select" name="visible_to_players">
+                                <option value="1">Si</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Stato record</label>
+                            <select class="form-select" name="is_active">
+                                <option value="1">Attivo</option>
+                                <option value="0">Disattivo</option>
+                            </select>
+                        </div>
+                        <div class="col-12 d-flex flex-wrap gap-2">
+                            <button type="submit" class="btn btn-sm btn-primary">Salva preset</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="lfns-preset-reset">Nuovo</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-6">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Stati del preset</h6>
+                    <span class="small text-muted">Orchestrazione stati core</span>
+                </div>
+                <div class="card-body">
+                    <form id="lfns-preset-state-form" class="row g-3">
+                        <input type="hidden" name="id" value="0">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Preset</label>
+                            <select class="form-select" name="preset_id" id="lfns-preset-select" required>
+                                <option value="">Seleziona...</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Stato core</label>
+                            <select class="form-select" name="state_id" id="lfns-state-select" required>
+                                <option value="">Seleziona...</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Azione</label>
+                            <select class="form-select" name="effect_mode">
+                                <option value="apply">Applica</option>
+                                <option value="remove">Rimuovi</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Intensita</label>
+                            <input type="number" step="0.1" min="0" class="form-control" name="intensity" value="1">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Ordine</label>
+                            <input type="number" class="form-control" name="sort_order" value="100">
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Durata valore</label>
+                            <input type="number" min="0" class="form-control" name="duration_value" value="0">
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Durata unita</label>
+                            <select class="form-select" name="duration_unit">
+                                <option value="scene">Scena</option>
+                                <option value="turn">Turno</option>
+                                <option value="minute">Minuto</option>
+                                <option value="hour">Ora</option>
+                                <option value="day">Giorno</option>
+                            </select>
+                        </div>
+                        <div class="col-12 d-flex flex-wrap gap-2">
+                            <button type="submit" class="btn btn-sm btn-primary">Salva step</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="lfns-preset-state-reset">Nuovo</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-action="lfns-preset-states-load">Carica elenco</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mt-1">
+        <div class="col-12 col-xl-5">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Assegnazioni personaggio</h6>
+                    <span class="small text-muted">Accesso ai preset</span>
+                </div>
+                <div class="card-body">
+                    <form id="lfns-assignment-form" class="row g-3">
+                        <input type="hidden" name="id" value="0">
+                        <div class="col-12">
+                            <label class="form-label">Cerca personaggio</label>
+                            <input type="text" class="form-control" id="lfns-character-search" placeholder="Nome o cognome...">
+                            <div id="lfns-character-search-results" class="list-group small mt-2"></div>
+                            <input type="hidden" name="character_id" value="">
+                            <div class="form-text">L'ID viene valorizzato automaticamente quando selezioni il personaggio.</div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Preset</label>
+                            <select class="form-select" name="preset_id" id="lfns-assignment-preset-select" required>
+                                <option value="">Seleziona...</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Ordine</label>
+                            <input type="number" class="form-control" name="sort_order" value="100">
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Stato record</label>
+                            <select class="form-select" name="is_active">
+                                <option value="1">Attivo</option>
+                                <option value="0">Disattivo</option>
+                            </select>
+                        </div>
+                        <div class="col-12 d-flex flex-wrap gap-2">
+                            <button type="submit" class="btn btn-sm btn-primary">Salva assegnazione</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="lfns-assignment-reset">Nuova</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-action="lfns-assignments-load">Carica elenco</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-7">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">Catalogo preset</h6>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Preset</th>
+                                    <th>Target</th>
+                                    <th>Step</th>
+                                    <th>Stato</th>
+                                    <th class="text-end">Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lfns-presets-table"></tbody>
+                        </table>
+                    </div>
+                    <div id="lfns-presets-empty" class="small text-muted px-3 py-4 d-none">Nessun preset configurato.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mt-1">
+        <div class="col-12 col-xl-7">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">Step del preset</h6>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Preset</th>
+                                    <th>Stato</th>
+                                    <th>Azione</th>
+                                    <th>Durata</th>
+                                    <th class="text-end">Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lfns-preset-states-table"></tbody>
+                        </table>
+                    </div>
+                    <div id="lfns-preset-states-empty" class="small text-muted px-3 py-4 d-none">Nessuno step caricato.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-5">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">Assegnazioni del personaggio</h6>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Preset</th>
+                                    <th>Target</th>
+                                    <th>Stato</th>
+                                    <th class="text-end">Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lfns-assignments-table"></tbody>
+                        </table>
+                    </div>
+                    <div id="lfns-assignments-empty" class="small text-muted px-3 py-4 d-none">Nessuna assegnazione caricata.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,43 @@
+CREATE TABLE IF NOT EXISTS `lf_advanced_items_profiles` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(120) NOT NULL,
+    `slug` VARCHAR(120) NOT NULL,
+    `description` TEXT NULL,
+    `category` VARCHAR(40) NOT NULL DEFAULT 'gear',
+    `linked_item_id` INT UNSIGNED NULL,
+    `resource_mode` ENUM('none','charges','durability','ammo') NOT NULL DEFAULT 'none',
+    `max_charges` INT UNSIGNED NOT NULL DEFAULT 0,
+    `max_durability` INT UNSIGNED NOT NULL DEFAULT 0,
+    `max_ammo` INT UNSIGNED NOT NULL DEFAULT 0,
+    `use_cost` INT UNSIGNED NOT NULL DEFAULT 1,
+    `restore_amount` INT UNSIGNED NOT NULL DEFAULT 1,
+    `rarity_label` VARCHAR(80) NOT NULL DEFAULT '',
+    `sort_order` INT NOT NULL DEFAULT 100,
+    `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+    `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `date_updated` TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uq_lf_advanced_items_profiles_slug` (`slug`),
+    KEY `idx_lf_advanced_items_profiles_active_order` (`is_active`, `sort_order`, `name`),
+    KEY `idx_lf_advanced_items_profiles_linked_item` (`linked_item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `lf_advanced_items_character_items` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `character_id` INT UNSIGNED NOT NULL,
+    `profile_id` INT UNSIGNED NOT NULL,
+    `custom_name` VARCHAR(120) NOT NULL DEFAULT '',
+    `charges_current` INT UNSIGNED NOT NULL DEFAULT 0,
+    `durability_current` INT UNSIGNED NOT NULL DEFAULT 0,
+    `ammo_current` INT UNSIGNED NOT NULL DEFAULT 0,
+    `is_equipped` TINYINT(1) NOT NULL DEFAULT 0,
+    `note` TEXT NULL,
+    `sort_order` INT NOT NULL DEFAULT 100,
+    `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+    `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `date_updated` TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `idx_lf_advanced_items_character_items_character` (`character_id`, `is_active`, `sort_order`),
+    KEY `idx_lf_advanced_items_character_items_profile` (`profile_id`),
+    KEY `idx_lf_advanced_items_character_items_equipped` (`character_id`, `is_equipped`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

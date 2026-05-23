@@ -1,0 +1,52 @@
+{
+  "id": "logeon.advance-maps",
+  "name": "Mappe avanzate",
+  "version": "0.1.0",
+  "vendor": "Logeon",
+  "description": "Modulo opzionale per evoluzione gerarchica e navigazione avanzata delle mappe.",
+  "privacy": {
+    "personal_data": false,
+    "data_categories": [],
+    "purposes": [],
+    "retention": "inherits_instance_policy",
+    "requires_consent": false,
+    "exports_user_data": false,
+    "supports_purge": true
+  },
+  "dependencies": [],
+  "compat": {
+    "min": "1.0.0",
+    "max": ""
+  },
+  "entrypoints": {
+    "bootstrap": "bootstrap.php",
+    "routes": "routes.php"
+  },
+  "migrations": {
+    "install": {
+      "path": "migrations"
+    },
+    "uninstall": {
+      "path": "migrations/uninstall"
+    }
+  },
+  "assets": {
+    "admin": {
+      "js": ["assets/js/admin/advance-maps.admin.js"]
+    },
+    "game": {
+      "js": ["assets/js/game/advance-maps.game.js"]
+    }
+  },
+  "privacy": {
+    "personal_data": false,
+    "data_categories": [],
+    "purposes": [
+      "map_navigation_runtime"
+    ],
+    "retention": "N/A",
+    "requires_consent": false,
+    "exports_user_data": false,
+    "supports_purge": true
+  }
+}

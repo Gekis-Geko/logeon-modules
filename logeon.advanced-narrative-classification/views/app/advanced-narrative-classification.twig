@@ -1,0 +1,87 @@
+{% extends 'app/layouts/layout.twig' %}
+
+{% block content %}
+<section class="container-fluid py-3" data-module-page="advanced-narrative-classification">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <header>
+            <h4 class="display-6 mb-1">Classificazione narrativa</h4>
+            <h6 class="mb-0">Esplora temi, tassonomie e contenuti collegati attraverso il vocabolario narrativo del gioco.</h6>
+        </header>
+    </div>
+
+    <div class="row g-3 mb-3" data-role="anc-game-summary">
+        <div class="col-6 col-lg-3">
+            <div class="card h-100"><div class="card-body py-2"><div class="small text-muted">Tassonomie</div><div class="h4 mb-0" data-role="anc-game-summary-taxonomies">0</div></div></div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card h-100"><div class="card-body py-2"><div class="small text-muted">Nodi</div><div class="h4 mb-0" data-role="anc-game-summary-nodes">0</div></div></div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card h-100"><div class="card-body py-2"><div class="small text-muted">Alias</div><div class="h4 mb-0" data-role="anc-game-summary-aliases">0</div></div></div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card h-100"><div class="card-body py-2"><div class="small text-muted">Tag mappati</div><div class="h4 mb-0" data-role="anc-game-summary-links">0</div></div></div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-12 col-xl-4">
+            <div class="card h-100">
+                <div class="card-header"><strong>Tassonomie</strong></div>
+                <div class="card-body">
+                    <div data-role="anc-game-taxonomy-tree" class="small text-muted">Caricamento...</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-xl-8">
+            <div class="card h-100">
+                <div class="card-header"><strong>Discovery avanzata</strong></div>
+                <div class="card-body">
+                    <form class="row g-2 align-items-end" data-role="anc-game-discovery-form">
+                        <div class="col-12 col-lg-5">
+                            <label class="form-label">Ricerca</label>
+                            <input type="search" class="form-control form-control-sm" name="query" placeholder="tag, alias, tassonomia...">
+                        </div>
+                        <div class="col-6 col-lg-3">
+                            <label class="form-label">Entità</label>
+                            <select class="form-select form-select-sm" name="entity_type">
+                                <option value="all">Tutte</option>
+                                <option value="quest_definition">Quest</option>
+                                <option value="narrative_event">Eventi narrativi</option>
+                                <option value="system_event">Eventi di sistema</option>
+                                <option value="scene">Scene</option>
+                                <option value="faction">Fazioni</option>
+                            </select>
+                        </div>
+                        <div class="col-6 col-lg-2">
+                            <label class="form-label">Match</label>
+                            <select class="form-select form-select-sm" name="match_mode">
+                                <option value="any">Qualsiasi</option>
+                                <option value="all">Tutti</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-lg-2 d-flex gap-2">
+                            <button type="submit" class="btn btn-sm btn-primary w-100">Cerca</button>
+                        </div>
+                    </form>
+
+                    <div class="mt-3">
+                        <div class="small text-muted mb-1">Filtri attivi</div>
+                        <div data-role="anc-game-active-filters" class="d-flex flex-wrap gap-2"></div>
+                    </div>
+
+                    <hr>
+
+                    <div class="mb-3">
+                        <div class="small text-muted mb-2">Tag in evidenza</div>
+                        <div data-role="anc-game-featured-tags" class="d-flex flex-wrap gap-2"></div>
+                    </div>
+
+                    <div data-role="anc-game-tag-context" class="d-none alert alert-secondary py-2"></div>
+                    <div data-role="anc-game-results" class="small text-muted">Seleziona una tassonomia, un tag o esegui una ricerca.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

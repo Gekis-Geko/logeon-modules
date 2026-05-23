@@ -1,0 +1,9 @@
+{% set target_form_id = form_id|default('create-character-modal-form') %}
+<div class="form-group mt-4" data-role="character-create-archetype-attributes" data-form-id="{{ target_form_id|e('html_attr') }}" style="display:none;">
+    <label class="mb-2">Attributi iniziali</label>
+    <div class="small text-muted mb-2" data-role="character-create-archetype-attributes-hint">
+        Le regole archetipo-attributo definiscono suggerimenti, vincoli e valori iniziali applicabili in questa fase.
+    </div>
+    <div class="d-grid gap-2" data-role="character-create-archetype-attributes-body"></div>
+</div>
+<script type="module" src="/modules/logeon.archetype-attributes/assets/js/public.js"></script>

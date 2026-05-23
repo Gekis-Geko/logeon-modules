@@ -1,0 +1,279 @@
+<section data-admin-page="advanced-items">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3 mt-3">
+        <header>
+            <h4 class="display-6 mb-1">Oggetti avanzati</h4>
+            <h6 class="mb-0">Profili oggetto avanzati, assegnazioni ai personaggi e stato d'uso reale.</h6>
+        </header>
+        <div class="d-flex flex-wrap gap-2">
+            <button type="button" class="btn btn-sm btn-outline-primary" data-action="lfai-admin-reload">
+                <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+            </button>
+        </div>
+    </div>
+
+    <div class="alert alert-info">
+        Questa prima versione concreta non sostituisce inventario o catalogo core: aggiunge un
+        layer opzionale di <b>profili avanzati</b> e <b>assegnazioni modulo</b> con cariche,
+        durabilita o munizioni gestite dal modulo.
+    </div>
+
+    <div class="row g-3">
+        <div class="col-12 col-xl-7">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Profili avanzati</h6>
+                    <span class="small text-muted">Catalogo del modulo</span>
+                </div>
+                <div class="card-body">
+                    <form id="lfai-profile-form" class="row g-3">
+                        <input type="hidden" name="id" value="0">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Nome profilo</label>
+                            <input type="text" class="form-control" name="name" maxlength="120" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Slug</label>
+                            <input type="text" class="form-control" name="slug" maxlength="120" placeholder="facoltativo">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Descrizione</label>
+                            <textarea class="form-control" name="description" rows="3" maxlength="1500"></textarea>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Categoria</label>
+                            <select class="form-select" name="category">
+                                <option value="gear">Gear</option>
+                                <option value="weapon">Weapon</option>
+                                <option value="consumable">Consumable</option>
+                                <option value="ammo">Ammo</option>
+                                <option value="focus">Focus</option>
+                                <option value="relic">Relic</option>
+                                <option value="tool">Tool</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Modalita risorsa</label>
+                            <select class="form-select" name="resource_mode">
+                                <option value="none">Nessuna</option>
+                                <option value="charges">Cariche</option>
+                                <option value="durability">Durabilita</option>
+                                <option value="ammo">Munizioni</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Etichetta rarita</label>
+                            <input type="text" class="form-control" name="rarity_label" maxlength="80" placeholder="Comune, raro...">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Collegamento opzionale a oggetto core</label>
+                            <div class="row g-2">
+                                <div class="col-12 col-md-8">
+                                    <input type="text" class="form-control" id="lfai-item-search" placeholder="Cerca oggetto core...">
+                                    <input type="hidden" name="linked_item_id" value="">
+                                    <div class="form-text">L'ID viene valorizzato automaticamente quando selezioni l'oggetto core.</div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div id="lfai-item-search-results" class="list-group small"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Max cariche</label>
+                            <input type="number" class="form-control" name="max_charges" min="0" value="0">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Max durabilita</label>
+                            <input type="number" class="form-control" name="max_durability" min="0" value="0">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Max munizioni</label>
+                            <input type="number" class="form-control" name="max_ammo" min="0" value="0">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Costo uso</label>
+                            <input type="number" class="form-control" name="use_cost" min="0" value="1">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Ripristino base</label>
+                            <input type="number" class="form-control" name="restore_amount" min="0" value="1">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Stato narrativo ID</label>
+                            <input type="number" class="form-control" name="narrative_state_id" min="0" value="">
+                            <div class="form-text">Vuoto = nessun trigger narrativo.</div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Azione stato narrativo</label>
+                            <select class="form-select" name="narrative_state_action">
+                                <option value="apply">Applica</option>
+                                <option value="remove">Rimuovi</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Soglia usi</label>
+                            <input type="number" class="form-control" name="narrative_state_threshold" min="0" value="0">
+                            <div class="form-text">Ogni X usi applica o rimuove lo stato.</div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Intensita stato</label>
+                            <input type="number" class="form-control" name="state_intensity" min="0.01" step="0.01" value="1.00">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Durata valore</label>
+                            <input type="number" class="form-control" name="state_duration_value" min="0" value="0">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Durata unita</label>
+                            <select class="form-select" name="state_duration_unit">
+                                <option value="scene">Scena</option>
+                                <option value="turn">Turno</option>
+                                <option value="minute">Minuto</option>
+                                <option value="hour">Ora</option>
+                                <option value="day">Giorno</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Ordine</label>
+                            <input type="number" class="form-control" name="sort_order" value="100">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Stato record</label>
+                            <select class="form-select" name="is_active">
+                                <option value="1">Attivo</option>
+                                <option value="0">Disattivo</option>
+                            </select>
+                        </div>
+                        <div class="col-12 d-flex flex-wrap gap-2">
+                            <button type="submit" class="btn btn-sm btn-primary">Salva profilo</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="lfai-profile-reset">Nuovo</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-5">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Assegnazioni personaggio</h6>
+                    <span class="small text-muted">Stato vivo del modulo</span>
+                </div>
+                <div class="card-body">
+                    <form id="lfai-assignment-form" class="row g-3">
+                        <input type="hidden" name="id" value="0">
+                        <div class="col-12">
+                            <label class="form-label">Cerca personaggio</label>
+                            <input type="text" class="form-control" id="lfai-character-search" placeholder="Nome o cognome...">
+                            <div id="lfai-character-search-results" class="list-group small mt-2"></div>
+                            <input type="hidden" name="character_id" value="">
+                            <div class="form-text">L'ID viene valorizzato automaticamente quando selezioni il personaggio.</div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Profilo</label>
+                            <select class="form-select" name="profile_id" id="lfai-profile-select" required>
+                                <option value="">Seleziona...</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Nome personalizzato</label>
+                            <input type="text" class="form-control" name="custom_name" maxlength="120" placeholder="facoltativo">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Cariche correnti</label>
+                            <input type="number" class="form-control" name="charges_current" min="0" value="0">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Durabilita corrente</label>
+                            <input type="number" class="form-control" name="durability_current" min="0" value="0">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Munizioni correnti</label>
+                            <input type="number" class="form-control" name="ammo_current" min="0" value="0">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Equipaggiato</label>
+                            <select class="form-select" name="is_equipped">
+                                <option value="0">No</option>
+                                <option value="1">Si</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Ordine</label>
+                            <input type="number" class="form-control" name="sort_order" value="100">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Stato record</label>
+                            <select class="form-select" name="is_active">
+                                <option value="1">Attivo</option>
+                                <option value="0">Disattivo</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Note</label>
+                            <textarea class="form-control" name="note" rows="3" maxlength="1000"></textarea>
+                        </div>
+                        <div class="col-12 d-flex flex-wrap gap-2">
+                            <button type="submit" class="btn btn-sm btn-primary">Salva assegnazione</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="lfai-assignment-reset">Nuova</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-action="lfai-assignments-load">Carica elenco</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mt-1">
+        <div class="col-12 col-xl-7">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">Catalogo profili</h6>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Profilo</th>
+                                    <th>Risorsa</th>
+                                    <th>Trigger stato</th>
+                                    <th>Core item</th>
+                                    <th>Stato</th>
+                                    <th class="text-end">Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lfai-profiles-table"></tbody>
+                        </table>
+                    </div>
+                    <div id="lfai-profiles-empty" class="small text-muted px-3 py-4 d-none">Nessun profilo configurato.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-5">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">Assegnazioni del personaggio</h6>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Oggetto</th>
+                                    <th>Stato</th>
+                                    <th>Flags</th>
+                                    <th class="text-end">Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lfai-assignments-table"></tbody>
+                        </table>
+                    </div>
+                    <div id="lfai-assignments-empty" class="small text-muted px-3 py-4 d-none">Nessuna assegnazione caricata.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,167 @@
+<div class="mt-3" data-admin-page="economy-effects">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <header>
+            <h4 class="display-6 mb-1">Effetti economici</h4>
+            <h6 class="mb-0">Layer contestuale sopra lo shop core: prezzi, disponibilita, accessi e spiegazioni narrative.</h6>
+        </header>
+        <button type="button" class="btn btn-sm btn-outline-primary" data-action="economy-admin-reload">
+            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+        </button>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-4 col-lg-2">
+            <div class="card h-100"><div class="card-body py-2"><div class="small text-muted">Totali</div><div class="h4 mb-0" data-role="economy-summary-total">0</div></div></div>
+        </div>
+        <div class="col-4 col-lg-2">
+            <div class="card h-100"><div class="card-body py-2"><div class="small text-muted">Attivi</div><div class="h4 mb-0" data-role="economy-summary-active">0</div></div></div>
+        </div>
+        <div class="col-4 col-lg-2">
+            <div class="card h-100"><div class="card-body py-2"><div class="small text-muted">Schedulati</div><div class="h4 mb-0" data-role="economy-summary-scheduled">0</div></div></div>
+        </div>
+        <div class="col-12 col-lg-6">
+            <div class="alert alert-secondary py-2 mb-0 small" data-role="economy-dependencies-note">
+                Il modulo si integra con shop core e puo sfruttare fazioni, valute multiple e quest quando presenti.
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-12 col-xl-5">
+            <div class="card h-100">
+                <div class="card-header"><strong>Configura effetto</strong></div>
+                <div class="card-body">
+                    <form data-role="economy-form" class="row g-2">
+                        <input type="hidden" name="id" value="0">
+                        <div class="col-12">
+                            <label class="form-label">Nome</label>
+                            <input type="text" class="form-control form-control-sm" name="name" maxlength="120">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Descrizione</label>
+                            <textarea class="form-control form-control-sm" name="description" rows="2" maxlength="1000"></textarea>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Tipo effetto</label>
+                            <select class="form-select form-select-sm" name="effect_type"></select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Ambito</label>
+                            <select class="form-select form-select-sm" name="scope_type"></select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Target</label>
+                            <select class="form-select form-select-sm" name="target_type"></select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Riferimento target</label>
+                            <select class="form-select form-select-sm" name="target_ref_id"></select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Collegamenti ambito</label>
+                            <select class="form-select form-select-sm" name="link_ids" multiple size="5"></select>
+                            <div class="form-text">Per l'ambito globale lascia vuoto.</div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label">Priorità</label>
+                            <input type="number" class="form-control form-control-sm" name="priority" value="100">
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label">Attivo</label>
+                            <select class="form-select form-select-sm" name="is_active">
+                                <option value="1">Si</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label">Visibile ai giocatori</label>
+                            <select class="form-select form-select-sm" name="visible_to_players">
+                                <option value="1">Si</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Da</label>
+                            <input type="datetime-local" class="form-control form-control-sm" name="start_at">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">A</label>
+                            <input type="datetime-local" class="form-control form-control-sm" name="end_at">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Prezzo %</label>
+                            <input type="number" class="form-control form-control-sm" name="price_percent_value" value="0">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Prezzo fisso</label>
+                            <input type="number" class="form-control form-control-sm" name="price_flat_value" value="0">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Disponibilità</label>
+                            <select class="form-select form-select-sm" name="availability_mode">
+                                <option value="default">Default</option>
+                                <option value="available">Disponibile</option>
+                                <option value="unavailable">Non disponibile</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Limite giacenza</label>
+                            <input type="number" class="form-control form-control-sm" name="stock_limit_value" value="0">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Accesso fazione</label>
+                            <select class="form-select form-select-sm" name="faction_access_mode">
+                                <option value="default">Default</option>
+                                <option value="allowed">Consentito</option>
+                                <option value="blocked">Bloccato</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Prezzo fazione %</label>
+                            <input type="number" class="form-control form-control-sm" name="faction_price_percent_value" value="0">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Testo narrativo</label>
+                            <input type="text" class="form-control form-control-sm" name="label_text" maxlength="255">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Note interne</label>
+                            <textarea class="form-control form-control-sm" name="notes" rows="2" maxlength="500"></textarea>
+                        </div>
+                        <div class="col-12 d-flex gap-2 mt-2">
+                            <button type="button" class="btn btn-sm btn-primary" data-action="economy-admin-save">Salva effetto</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="economy-admin-preview">Preview</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="economy-admin-reset">Reset</button>
+                        </div>
+                    </form>
+
+                    <div class="alert alert-light border mt-3 mb-0 d-none" data-role="economy-preview-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-7">
+            <div class="card h-100">
+                <div class="card-header"><strong>Catalogo effetti</strong></div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Effetto</th>
+                                    <th>Ambito</th>
+                                    <th>Target</th>
+                                    <th class="text-center">Priorità</th>
+                                    <th class="text-end">Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody data-role="economy-effects-table">
+                                <tr><td colspan="5" class="text-muted small">Caricamento...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

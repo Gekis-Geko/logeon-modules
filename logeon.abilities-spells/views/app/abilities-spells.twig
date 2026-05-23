@@ -1,0 +1,39 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<main class="container-fluid py-3">
+    <header class="mb-3">
+        <h4 class="display-6 mb-1">Abilita e incantesimi</h4>
+        <p class="text-muted mb-0">
+            Qui trovi il riepilogo delle abilita disponibili, apprese o in progressione
+            per il tuo personaggio.
+        </p>
+    </header>
+
+    <div class="row g-3">
+        <div class="col-12 col-xl-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Punti abilita</h6>
+                    <span class="small text-muted">Per categoria</span>
+                </div>
+                <div class="card-body">
+                    <div id="logeon-abilities-page-points" data-module-key="game.abilities-spells"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-8">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Le tue abilita</h6>
+                    <span class="small text-muted">Catalogo personale</span>
+                </div>
+                <div class="card-body">
+                    <div id="logeon-abilities-page-list" data-module-key="game.abilities-spells"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

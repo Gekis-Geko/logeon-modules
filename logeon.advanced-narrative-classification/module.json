@@ -1,0 +1,70 @@
+{
+  "id": "logeon.advanced-narrative-classification",
+  "name": "Classificazione narrativa avanzata",
+  "version": "0.1.0",
+  "vendor": "Logeon",
+  "description": "Modulo opzionale che estende i narrative tags core con tassonomie leggere, alias controllati e discovery avanzata.",
+  "privacy": {
+    "personal_data": false,
+    "data_categories": [],
+    "purposes": [],
+    "retention": "inherits_instance_policy",
+    "requires_consent": false,
+    "exports_user_data": false,
+    "supports_purge": true
+  },
+  "dependencies": [],
+  "compat": {
+    "min": "0.8.0",
+    "max": ""
+  },
+  "entrypoints": {
+    "bootstrap": "bootstrap.php",
+    "routes": "routes.php"
+  },
+  "assets": {
+    "admin": {
+      "js": [
+        "assets/js/admin.js"
+      ]
+    },
+    "game": {
+      "js": [
+        "assets/js/game.js"
+      ]
+    }
+  },
+  "menus": {
+    "admin": {
+      "aside": [
+        {
+          "label": "Classificazione narrativa avanzata",
+          "href": "/admin/advanced-narrative-classification",
+          "icon": "",
+          "page": "advanced-narrative-classification",
+          "section": "Narrativa",
+          "section_order": 50,
+          "order": 150
+        }
+      ]
+    },
+    "game": {
+      "info_dropdown": [
+        {
+          "label": "Classificazione narrativa",
+          "href": "/game/advanced-narrative-classification",
+          "icon": "bi bi-tags",
+          "order": 245
+        }
+      ],
+      "info_offcanvas": [
+        {
+          "label": "Classificazione narrativa",
+          "href": "/game/advanced-narrative-classification",
+          "icon": "bi bi-tags",
+          "order": 245
+        }
+      ]
+    }
+  }
+}

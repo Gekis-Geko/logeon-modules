@@ -1,0 +1,70 @@
+{
+  "id": "logeon.narrative-states",
+  "name": "Stati Narrativi",
+  "version": "0.1.0",
+  "vendor": "Logeon",
+  "description": "Overlay opzionale per preset e strumenti avanzati sugli stati narrativi.",
+  "privacy": {
+    "personal_data": false,
+    "data_categories": [],
+    "purposes": [],
+    "retention": "inherits_instance_policy",
+    "requires_consent": false,
+    "exports_user_data": false,
+    "supports_purge": true
+  },
+  "dependencies": [],
+  "compat": {
+    "min": "0.8.0",
+    "max": ""
+  },
+  "entrypoints": {
+    "bootstrap": "bootstrap.php",
+    "routes": "routes.php"
+  },
+  "assets": {
+    "admin": {
+      "js": [
+        "assets/js/admin.js"
+      ]
+    },
+    "game": {
+      "js": [
+        "assets/js/game.js"
+      ]
+    }
+  },
+  "menus": {
+    "admin": {
+      "aside": [
+        {
+          "label": "Stati Narrativi",
+          "href": "/admin/narrative-states",
+          "icon": "",
+          "page": "narrative-states",
+          "section": "Narrativa",
+          "section_order": 60,
+          "order": 270
+        }
+      ]
+    },
+    "game": {
+      "info_dropdown": [
+        {
+          "label": "Preset narrativi",
+          "href": "/game/narrative-states",
+          "icon": "",
+          "order": 230
+        }
+      ],
+      "info_offcanvas": [
+        {
+          "label": "Preset narrativi",
+          "href": "/game/narrative-states",
+          "icon": "",
+          "order": 230
+        }
+      ]
+    }
+  }
+}

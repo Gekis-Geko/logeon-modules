@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS `production_jobs`;
+DROP TABLE IF EXISTS `production_source_items`;
+DROP TABLE IF EXISTS `production_sources`;
+DROP TABLE IF EXISTS `production_process_requirements`;
+DROP TABLE IF EXISTS `production_process_outputs`;
+DROP TABLE IF EXISTS `production_process_inputs`;
+DROP TABLE IF EXISTS `production_processes`;
+DROP TABLE IF EXISTS `production_profession_links`;
+DROP TABLE IF EXISTS `production_professions`;

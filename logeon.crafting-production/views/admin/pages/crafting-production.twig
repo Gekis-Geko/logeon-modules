@@ -1,0 +1,269 @@
+<div class="mt-3" data-admin-page="crafting-production">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <header>
+            <h4 class="display-6 mb-1">Creazione & Produzione</h4>
+            <h6 class="mb-0">Processi produttivi, professioni leggere, sorgenti materiali e tracciabilita.</h6>
+        </header>
+        <button type="button" class="btn btn-sm btn-outline-primary" data-action="crafting-admin-reload">
+            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+        </button>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-6 col-lg-2">
+            <div class="card h-100"><div class="card-body py-2"><div class="small text-muted">Professioni</div><div class="h4 mb-0" data-role="crafting-summary-professions">0</div></div></div>
+        </div>
+        <div class="col-6 col-lg-2">
+            <div class="card h-100"><div class="card-body py-2"><div class="small text-muted">Processi</div><div class="h4 mb-0" data-role="crafting-summary-processes">0</div></div></div>
+        </div>
+        <div class="col-6 col-lg-2">
+            <div class="card h-100"><div class="card-body py-2"><div class="small text-muted">Attivi</div><div class="h4 mb-0" data-role="crafting-summary-active-processes">0</div></div></div>
+        </div>
+        <div class="col-6 col-lg-2">
+            <div class="card h-100"><div class="card-body py-2"><div class="small text-muted">Sorgenti</div><div class="h4 mb-0" data-role="crafting-summary-sources">0</div></div></div>
+        </div>
+        <div class="col-12 col-lg-4">
+            <div class="alert alert-secondary py-2 mb-0 small" data-role="crafting-dependencies-note">
+                Il modulo usa inventario e item core; puo dialogare con fazioni, quest ed economy quando presenti.
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-12 col-xxl-4">
+            <div class="card h-100">
+                <div class="card-header"><strong>Professione</strong></div>
+                <div class="card-body">
+                    <form data-role="crafting-profession-form" class="row g-2">
+                        <input type="hidden" name="id" value="0">
+                        <div class="col-sm-5">
+                            <label class="form-label">Codice</label>
+                            <input type="text" class="form-control form-control-sm" name="code" maxlength="80">
+                        </div>
+                        <div class="col-sm-7">
+                            <label class="form-label">Nome</label>
+                            <input type="text" class="form-control form-control-sm" name="name" maxlength="120">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Descrizione</label>
+                            <textarea class="form-control form-control-sm" name="description" rows="2" maxlength="1000"></textarea>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label">Attiva</label>
+                            <select class="form-select form-select-sm" name="is_active">
+                                <option value="1">Si</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-8">
+                            <label class="form-label">Personaggi assegnati</label>
+                            <input type="text" class="form-control form-control-sm" id="crafting-profession-character-search" placeholder="Cerca personaggio...">
+                            <input type="hidden" name="assigned_character_ids_csv" value="">
+                            <div id="crafting-profession-character-results" class="list-group small mt-2"></div>
+                            <div id="crafting-profession-character-chips" class="d-flex flex-wrap gap-1 mt-2"></div>
+                            <div class="form-text">Seleziona i personaggi dai suggerimenti: gli ID vengono gestiti automaticamente.</div>
+                        </div>
+                        <div class="col-12 d-flex gap-2 mt-2">
+                            <button type="button" class="btn btn-sm btn-primary" data-action="crafting-admin-save-profession">Salva</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="crafting-admin-reset-profession">Reset</button>
+                        </div>
+                    </form>
+                    <div class="table-responsive mt-3">
+                        <table class="table table-sm align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Professione</th>
+                                    <th>Assegnazioni</th>
+                                    <th class="text-end">Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody data-role="crafting-professions-table">
+                                <tr><td colspan="3" class="text-muted small">Caricamento...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-xxl-4">
+            <div class="card h-100">
+                <div class="card-header"><strong>Processo</strong></div>
+                <div class="card-body">
+                    <form data-role="crafting-process-form" class="row g-2">
+                        <input type="hidden" name="id" value="0">
+                        <div class="col-sm-7">
+                            <label class="form-label">Nome</label>
+                            <input type="text" class="form-control form-control-sm" name="name" maxlength="120">
+                        </div>
+                        <div class="col-sm-5">
+                            <label class="form-label">Tipo</label>
+                            <select class="form-select form-select-sm" name="process_type"></select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Categoria</label>
+                            <input type="text" class="form-control form-control-sm" name="category" maxlength="80">
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-label">Visibilità</label>
+                            <select class="form-select form-select-sm" name="visibility"></select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-label">Attivo</label>
+                            <select class="form-select form-select-sm" name="is_active">
+                                <option value="1">Si</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Stazione</label>
+                            <input type="text" class="form-control form-control-sm" name="station_type" maxlength="80" placeholder="forge, kitchen, lab">
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-label">Durata</label>
+                            <select class="form-select form-select-sm" name="duration_type"></select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-label">Valore durata</label>
+                            <input type="number" class="form-control form-control-sm" name="duration_value" value="0">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Descrizione</label>
+                            <textarea class="form-control form-control-sm" name="description" rows="2" maxlength="2000"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Input</label>
+                            <textarea class="form-control form-control-sm font-monospace" name="inputs_lines" rows="4"></textarea>
+                            <div class="form-text" data-role="crafting-hint-inputs"></div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Output</label>
+                            <textarea class="form-control form-control-sm font-monospace" name="outputs_lines" rows="4"></textarea>
+                            <div class="form-text" data-role="crafting-hint-outputs"></div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Requisiti</label>
+                            <textarea class="form-control form-control-sm font-monospace" name="requirements_lines" rows="4"></textarea>
+                            <div class="form-text" data-role="crafting-hint-requirements"></div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Note</label>
+                            <textarea class="form-control form-control-sm" name="notes" rows="2" maxlength="500"></textarea>
+                        </div>
+                        <div class="col-12 d-flex gap-2 mt-2">
+                            <button type="button" class="btn btn-sm btn-primary" data-action="crafting-admin-save-process">Salva</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="crafting-admin-reset-process">Reset</button>
+                        </div>
+                    </form>
+                    <div class="table-responsive mt-3">
+                        <table class="table table-sm align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Processo</th>
+                                    <th>Tipo</th>
+                                    <th class="text-end">Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody data-role="crafting-processes-table">
+                                <tr><td colspan="3" class="text-muted small">Caricamento...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-xxl-4">
+            <div class="card h-100">
+                <div class="card-header"><strong>Sorgente materiali</strong></div>
+                <div class="card-body">
+                    <form data-role="crafting-source-form" class="row g-2">
+                        <input type="hidden" name="id" value="0">
+                        <div class="col-sm-7">
+                            <label class="form-label">Nome</label>
+                            <input type="text" class="form-control form-control-sm" name="name" maxlength="120">
+                        </div>
+                        <div class="col-sm-5">
+                            <label class="form-label">Tipo</label>
+                            <select class="form-select form-select-sm" name="source_type"></select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label">Visibilità</label>
+                            <select class="form-select form-select-sm" name="visibility"></select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label">Ambito</label>
+                            <select class="form-select form-select-sm" name="scope_type"></select>
+                        </div>
+                        <div class="col-sm-8">
+                            <label class="form-label">Riferimento ambito</label>
+                            <input type="text" class="form-control form-control-sm" id="crafting-source-scope-search" placeholder="Seleziona prima il tipo di scope">
+                            <input type="hidden" name="scope_ref_id" value="0">
+                            <div id="crafting-source-scope-results" class="list-group small mt-2"></div>
+                            <div class="form-text">Per scope globale non serve alcun riferimento. Negli altri casi scegli l'entita dai suggerimenti.</div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label">Attiva</label>
+                            <select class="form-select form-select-sm" name="is_active">
+                                <option value="1">Si</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Descrizione</label>
+                            <textarea class="form-control form-control-sm" name="description" rows="2" maxlength="1000"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Oggetti disponibili</label>
+                            <textarea class="form-control form-control-sm font-monospace" name="items_lines" rows="4"></textarea>
+                            <div class="form-text" data-role="crafting-hint-source-items"></div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Note</label>
+                            <textarea class="form-control form-control-sm" name="notes" rows="2" maxlength="500"></textarea>
+                        </div>
+                        <div class="col-12 d-flex gap-2 mt-2">
+                            <button type="button" class="btn btn-sm btn-primary" data-action="crafting-admin-save-source">Salva</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="crafting-admin-reset-source">Reset</button>
+                        </div>
+                    </form>
+                    <div class="table-responsive mt-3">
+                        <table class="table table-sm align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Sorgente</th>
+                                    <th>Ambito</th>
+                                    <th class="text-end">Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody data-role="crafting-sources-table">
+                                <tr><td colspan="3" class="text-muted small">Caricamento...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-3">
+        <div class="card-header"><strong>Storico lavorazioni</strong></div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Processo</th>
+                            <th>Personaggio</th>
+                            <th>Stato</th>
+                            <th>Quando</th>
+                        </tr>
+                    </thead>
+                    <tbody data-role="crafting-jobs-table">
+                        <tr><td colspan="4" class="text-muted small">Caricamento...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,80 @@
+CREATE TABLE IF NOT EXISTS `combat_contexts` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `conflict_id` INT UNSIGNED NOT NULL,
+    `tier_level` TINYINT UNSIGNED NOT NULL DEFAULT 1,
+    `combat_mode` VARCHAR(40) NOT NULL DEFAULT 'duel',
+    `escalation_level` TINYINT UNSIGNED NOT NULL DEFAULT 1,
+    `progression_index` INT UNSIGNED NOT NULL DEFAULT 0,
+    `resolution_condition` VARCHAR(80) NOT NULL DEFAULT '',
+    `status` VARCHAR(30) NOT NULL DEFAULT 'active',
+    `created_by` INT UNSIGNED NULL DEFAULT NULL,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `completed_at` DATETIME NULL DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uq_combat_contexts_conflict` (`conflict_id`),
+    KEY `idx_combat_contexts_status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `combat_participant_states` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `conflict_id` INT UNSIGNED NOT NULL,
+    `character_id` INT UNSIGNED NOT NULL,
+    `team_key` VARCHAR(50) NOT NULL DEFAULT 'side_a',
+    `stamina_max` INT UNSIGNED NOT NULL DEFAULT 100,
+    `stamina_current` INT UNSIGNED NOT NULL DEFAULT 100,
+    `fatigue_level` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    `stance` VARCHAR(40) NOT NULL DEFAULT 'neutral',
+    `pressure_level` INT NOT NULL DEFAULT 0,
+    `threat_exposure` INT NOT NULL DEFAULT 0,
+    `combat_readiness` TINYINT UNSIGNED NOT NULL DEFAULT 100,
+    `engagement_targets_json` LONGTEXT NULL DEFAULT NULL,
+    `status` VARCHAR(30) NOT NULL DEFAULT 'active',
+    `last_action_at` DATETIME NULL DEFAULT NULL,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uq_combat_participant_conflict_character` (`conflict_id`, `character_id`),
+    KEY `idx_combat_participant_team` (`conflict_id`, `team_key`),
+    KEY `idx_combat_participant_status` (`conflict_id`, `status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `combat_action_intents` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `conflict_id` INT UNSIGNED NOT NULL,
+    `actor_id` INT UNSIGNED NOT NULL,
+    `action_type` VARCHAR(40) NOT NULL,
+    `primary_target_id` INT UNSIGNED NULL DEFAULT NULL,
+    `secondary_targets` LONGTEXT NULL DEFAULT NULL,
+    `narrative_reference` VARCHAR(255) NULL DEFAULT NULL,
+    `stamina_cost_preview` INT UNSIGNED NOT NULL DEFAULT 0,
+    `resolution_status` VARCHAR(30) NOT NULL DEFAULT 'pending',
+    `outcome_category` VARCHAR(40) NULL DEFAULT NULL,
+    `outcome_summary` TEXT NULL DEFAULT NULL,
+    `resolution_payload_json` LONGTEXT NULL DEFAULT NULL,
+    `chat_message_id` INT UNSIGNED NULL DEFAULT NULL,
+    `declared_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `resolved_at` DATETIME NULL DEFAULT NULL,
+    `resolved_by` INT UNSIGNED NULL DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `idx_combat_action_conflict_status` (`conflict_id`, `resolution_status`),
+    KEY `idx_combat_action_actor` (`actor_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `combat_state_effects` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `conflict_id` INT UNSIGNED NOT NULL,
+    `source_actor_id` INT UNSIGNED NULL DEFAULT NULL,
+    `target_actor_id` INT UNSIGNED NOT NULL,
+    `effect_type` VARCHAR(60) NOT NULL,
+    `intensity` TINYINT UNSIGNED NOT NULL DEFAULT 1,
+    `duration_model` VARCHAR(30) NOT NULL DEFAULT 'combat',
+    `duration_value` INT NOT NULL DEFAULT 0,
+    `removal_conditions_json` LONGTEXT NULL DEFAULT NULL,
+    `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `resolved_at` DATETIME NULL DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `idx_combat_effect_conflict_target` (`conflict_id`, `target_actor_id`, `is_active`),
+    KEY `idx_combat_effect_type` (`effect_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

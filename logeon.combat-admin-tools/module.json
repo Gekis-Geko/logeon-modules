@@ -1,0 +1,57 @@
+{
+  "id": "logeon.combat-admin-tools",
+  "name": "Strumenti di Amministrazione del Combattimento",
+  "version": "0.1.0",
+  "vendor": "Logeon",
+  "description": "Estensione opzionale Tier 3 per diagnostica staff e dashboard di bilanciamento del combattimento narrativo.",
+  "privacy": {
+    "personal_data": false,
+    "data_categories": [],
+    "purposes": [],
+    "retention": "inherits_instance_policy",
+    "requires_consent": false,
+    "exports_user_data": false,
+    "supports_purge": true
+  },
+  "dependencies": [
+    {
+      "id": "logeon.narrative-combat",
+      "required": true
+    }
+  ],
+  "compat": {
+    "min": "0.8.0",
+    "max": ""
+  },
+  "entrypoints": {
+    "bootstrap": "bootstrap.php",
+    "routes": "routes.php"
+  },
+  "assets": {
+    "admin": {
+      "js": [
+        "assets/js/admin.js"
+      ]
+    },
+    "game": {
+      "js": [
+        "assets/js/game.js"
+      ]
+    }
+  },
+  "menus": {
+    "admin": {
+      "aside": [
+        {
+          "label": "Strumenti di Amministrazione del Combattimento",
+          "href": "/admin/combat-admin-tools",
+          "icon": "",
+          "page": "combat-admin-tools",
+          "section": "Gameplay",
+          "section_order": 70,
+          "order": 258
+        }
+      ]
+    }
+  }
+}

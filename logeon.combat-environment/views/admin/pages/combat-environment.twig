@@ -1,0 +1,132 @@
+<div class="mt-3" data-admin-page="combat-environment">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <header>
+            <h4 class="display-6 mb-1">Ambiente di Combattimento</h4>
+            <h6 class="mb-0">Estensione Tier 3 per feature ambientali avanzate, chokepoint e opportunita contestuali del combattimento.</h6>
+        </header>
+        <button type="button" class="btn btn-sm btn-outline-primary" data-action="combat-environment-admin-reload">
+            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+        </button>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-12 col-xl-4">
+            <div class="card h-100">
+                <div class="card-header"><strong>Profondita ambiente</strong></div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <label class="form-label">Modalità complessità</label>
+                        <select class="form-select form-select-sm" name="environment_complexity_mode">
+                            <option value="minimal">Minimale</option>
+                            <option value="standard">Standard</option>
+                            <option value="advanced">Avanzata</option>
+                        </select>
+                    </div>
+                    <div class="small text-muted mb-3" data-role="combat-environment-base-tier">
+                        Verifica dipendenza Narrative Combattimento...
+                    </div>
+                    <button type="button" class="btn btn-sm btn-primary" data-action="combat-environment-settings-save">Salva impostazione</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-8">
+            <div class="card h-100">
+                <div class="card-header"><strong>Funzionalità ambientali</strong></div>
+                <div class="card-body">
+                    <form data-role="combat-environment-feature-form" class="row g-2">
+                        <input type="hidden" name="id" value="0">
+                        <div class="col-md-4">
+                            <label class="form-label">Conflitto</label>
+                            <select class="form-select form-select-sm" name="conflict_id"></select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Tipo</label>
+                            <select class="form-select form-select-sm" name="feature_type">
+                                <option value="cover">Copertura</option>
+                                <option value="hazard">Pericolo</option>
+                                <option value="utility">Utilità</option>
+                                <option value="chokepoint">Punto di Stallo</option>
+                                <option value="terrain">Terreno</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Stato</label>
+                            <select class="form-select form-select-sm" name="state_key">
+                                <option value="active">Attivo</option>
+                                <option value="fortified">Fortificato</option>
+                                <option value="compromised">Compromesso</option>
+                                <option value="escalated">Escalato</option>
+                                <option value="stabilized">Stabilizzato</option>
+                                <option value="blocked">Bloccato</option>
+                                <option value="open">Aperto</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Nome funzionalità</label>
+                            <input type="text" class="form-control form-control-sm" name="feature_name" maxlength="160">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Zona</label>
+                            <input type="text" class="form-control form-control-sm" name="zone_key" maxlength="80" placeholder="global / corridor / roof">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Lato controllo</label>
+                            <input type="text" class="form-control form-control-sm" name="control_side_key" maxlength="40" placeholder="side_a / side_b">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Descrizione</label>
+                            <textarea class="form-control form-control-sm" name="description" rows="2"></textarea>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Impatto sulla Visibilità</label>
+                            <input type="number" class="form-control form-control-sm" name="visibility_impact" value="0" min="-10" max="10">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Impatto sulla Mobilità</label>
+                            <input type="number" class="form-control form-control-sm" name="mobility_impact" value="0" min="-10" max="10">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Impatto sulle Pericoli</label>
+                            <input type="number" class="form-control form-control-sm" name="hazard_impact" value="0" min="-10" max="10">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Impatto sulla Copertura</label>
+                            <input type="number" class="form-control form-control-sm" name="cover_impact" value="0" min="-10" max="10">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Etichette di convenienza</label>
+                            <input type="text" class="form-control form-control-sm" name="affordance_tags" placeholder="cover, flank, fire, pressure">
+                        </div>
+                        <div class="col-12 d-flex gap-2">
+                            <button type="button" class="btn btn-sm btn-primary" data-action="combat-environment-feature-save">Salva feature</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="combat-environment-feature-reset">Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><strong>Feature registrate</strong></div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Zona</th>
+                            <th class="text-center">Tipo</th>
+                            <th class="text-center">Stato</th>
+                            <th class="text-end">Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody data-role="combat-environment-table">
+                        <tr><td colspan="5" class="text-muted small">Caricamento...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,68 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<section class="container py-3" data-module-page="crafting-production">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <header>
+            <h4 class="display-6 mb-1">Creazione & Produzione</h4>
+            <h6 class="mb-0">Trasforma materiali, usa professioni e sfrutta il contesto narrativo per produrre beni nel mondo di gioco.</h6>
+        </header>
+        <button type="button" class="btn btn-sm btn-outline-primary" data-action="crafting-game-reload">
+            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+        </button>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-6 col-lg-3">
+            <div class="card h-100"><div class="card-body py-2"><div class="small text-muted">Professioni</div><div class="h4 mb-0" data-role="crafting-game-summary-professions">0</div></div></div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card h-100"><div class="card-body py-2"><div class="small text-muted">Processi eseguibili</div><div class="h4 mb-0" data-role="crafting-game-summary-available">0</div></div></div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card h-100"><div class="card-body py-2"><div class="small text-muted">Processi bloccati</div><div class="h4 mb-0" data-role="crafting-game-summary-blocked">0</div></div></div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card h-100"><div class="card-body py-2"><div class="small text-muted">Sorgenti</div><div class="h4 mb-0" data-role="crafting-game-summary-sources">0</div></div></div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-12 col-xl-4">
+            <div class="card h-100">
+                <div class="card-header"><strong>Le tue professioni</strong></div>
+                <div class="card-body" data-role="crafting-game-professions">
+                    <div class="text-muted small">Caricamento...</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-xl-8">
+            <div class="card h-100">
+                <div class="card-header"><strong>Processi disponibili</strong></div>
+                <div class="card-body" data-role="crafting-game-processes">
+                    <div class="text-muted small">Caricamento...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mt-1">
+        <div class="col-12 col-xl-6">
+            <div class="card h-100">
+                <div class="card-header"><strong>Sorgenti materiali</strong></div>
+                <div class="card-body" data-role="crafting-game-sources">
+                    <div class="text-muted small">Caricamento...</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-xl-6">
+            <div class="card h-100">
+                <div class="card-header"><strong>Storico recente</strong></div>
+                <div class="card-body" data-role="crafting-game-jobs">
+                    <div class="text-muted small">Caricamento...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

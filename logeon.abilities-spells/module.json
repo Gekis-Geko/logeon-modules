@@ -1,0 +1,70 @@
+{
+  "id": "logeon.abilities-spells",
+  "name": "Abilità e incantesimi",
+  "version": "0.1.0",
+  "vendor": "Logeon",
+  "description": "Modulo opzionale per abilita, incantesimi e UI additiva in location.",
+  "privacy": {
+    "personal_data": false,
+    "data_categories": [],
+    "purposes": [],
+    "retention": "inherits_instance_policy",
+    "requires_consent": false,
+    "exports_user_data": false,
+    "supports_purge": true
+  },
+  "dependencies": [],
+  "compat": {
+    "min": "0.8.0",
+    "max": ""
+  },
+  "entrypoints": {
+    "bootstrap": "bootstrap.php",
+    "routes": "routes.php"
+  },
+  "menus": {
+    "admin": {
+      "aside": [
+        {
+          "label": "Abilità e incantesimi",
+          "href": "/admin/abilities-spells",
+          "icon": "",
+          "page": "abilities-spells",
+          "section": "Parametri ed entità",
+          "section_order": 60,
+          "order": 260
+        }
+      ]
+    },
+    "game": {
+      "info_dropdown": [
+        {
+          "label": "Abilità e incantesimi",
+          "href": "/game/abilities-spells",
+          "icon": "bi bi-stars",
+          "order": 220
+        }
+      ],
+      "info_offcanvas": [
+        {
+          "label": "Abilità e incantesimi",
+          "href": "/game/abilities-spells",
+          "icon": "bi bi-stars",
+          "order": 220
+        }
+      ]
+    }
+  },
+  "assets": {
+    "admin": {
+      "js": [
+        "assets/js/admin.js"
+      ]
+    },
+    "game": {
+      "js": [
+        "assets/js/game.js"
+      ]
+    }
+  }
+}

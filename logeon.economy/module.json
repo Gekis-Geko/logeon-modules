@@ -1,0 +1,47 @@
+{
+  "id": "logeon.economy",
+  "name": "Effetti economici",
+  "version": "0.1.0",
+  "vendor": "Logeon",
+  "description": "Modulo opzionale che aggiunge effetti economici contestuali e narrativi sopra il core shop.",
+  "privacy": {
+    "personal_data": false,
+    "data_categories": [],
+    "purposes": [],
+    "retention": "inherits_instance_policy",
+    "requires_consent": false,
+    "exports_user_data": false,
+    "supports_purge": true
+  },
+  "dependencies": [],
+  "compat": {
+    "min": "0.8.0",
+    "max": ""
+  },
+  "entrypoints": {
+    "bootstrap": "bootstrap.php",
+    "routes": "routes.php"
+  },
+  "assets": {
+    "admin": {
+      "js": [
+        "assets/js/admin.js"
+      ]
+    }
+  },
+  "menus": {
+    "admin": {
+      "aside": [
+        {
+          "label": "Effetti economici",
+          "href": "/admin/economy-effects",
+          "icon": "",
+          "page": "economy-effects",
+          "section": "Commercio",
+          "section_order": 60,
+          "order": 220
+        }
+      ]
+    }
+  }
+}

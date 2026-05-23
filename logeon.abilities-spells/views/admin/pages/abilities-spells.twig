@@ -1,0 +1,937 @@
+<section class="mt-3" data-admin-page="abilities-spells">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+        <header>
+            <h4 class="display-6 mb-1">Abilità e incantesimi</h4>
+            <h6 class="mb-0">Catalogo abilità, assegnazioni personaggio e gestione runtime del modulo opzionale.</h6>
+        </header>
+        <div class="d-flex flex-wrap gap-2">
+            <button type="button" class="btn btn-sm btn-outline-primary" data-action="lfas-admin-reload">
+                <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+            </button>
+            <button type="button" class="btn btn-sm btn-primary" data-action="lfas-ability-create">
+                <i class="bi bi-plus-lg me-1"></i>Nuova abilità
+            </button>
+        </div>
+    </div>
+
+    <div class="alert alert-info mb-3">
+        Questa versione supporta abilita additive con bersaglio <b>se stesso</b> o <b>scena</b>, inclusa l'applicazione o la rimozione di stati narrativi core.
+    </div>
+
+    <div class="row g-3">
+        <div class="col-12 col-xl-8">
+            <div id="grid-admin-lfas-abilities"></div>
+        </div>
+
+        <div class="col-12 col-xl-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h6 class="mb-0">Gestione avanzata</h6>
+                    <div class="small text-muted">Apri i pannelli dedicati senza allungare la pagina principale.</div>
+                </div>
+                <div class="card-body d-grid gap-2">
+                    <button type="button" class="btn btn-outline-primary text-start" data-bs-toggle="modal" data-bs-target="#lfas-assignments-modal">
+                        <i class="bi bi-people me-2"></i>Assegnazioni personaggio
+                    </button>
+                    <button type="button" class="btn btn-outline-primary text-start" data-bs-toggle="modal" data-bs-target="#lfas-pending-approvals-modal">
+                        <i class="bi bi-hourglass-split me-2"></i>Approvazioni in attesa
+                    </button>
+                    <button type="button" class="btn btn-outline-primary text-start" data-bs-toggle="modal" data-bs-target="#lfas-rank-rewards-modal">
+                        <i class="bi bi-award me-2"></i>Premi punti da grado
+                    </button>
+                    <hr class="my-2">
+                    <button type="button" class="btn btn-sm btn-primary" data-action="lfas-assignment-create">
+                        <i class="bi bi-plus-lg me-1"></i>Nuova assegnazione
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="lfas-assignments-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title mb-1">Assegnazioni personaggio</h5>
+                        <div class="small text-muted">Filtra per personaggio e gestisci le assegnazioni attive.</div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="lfas-assignment-filter-form" class="row g-2 align-items-end mb-3" autocomplete="off" novalidate>
+                        <div class="col-12">
+                            <div data-role="lfas-character-search-wrap">
+                                <label for="lfas-assignment-filter-character-search" class="form-label mb-1">Personaggio</label>
+                                <input id="lfas-assignment-filter-character-search" name="character_label" type="text" class="form-control" maxlength="120" placeholder="Cerca nome o cognome...">
+                                <input type="hidden" name="character_id" value="">
+                                <div id="lfas-assignment-filter-character-results" class="list-group small mt-2"></div>
+                                <div class="form-text">Seleziona un personaggio dai suggerimenti per caricare le assegnazioni.</div>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex flex-wrap gap-2">
+                            <button type="submit" class="btn btn-sm btn-outline-primary">Carica</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="lfas-assignment-reset">Reset</button>
+                            <button type="button" class="btn btn-sm btn-primary" data-action="lfas-assignment-create">
+                                <i class="bi bi-plus-lg me-1"></i>Nuova
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="small text-muted pb-2" data-role="lfas-assignment-context">
+                        Seleziona un personaggio per visualizzare le assegnazioni.
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Personaggio</th>
+                                    <th>Abilita</th>
+                                    <th>Stato</th>
+                                    <th class="text-end">Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lfas-assignments-table"></tbody>
+                        </table>
+                    </div>
+                    <div id="lfas-assignments-empty" class="small text-muted py-4 d-none">
+                        Nessuna assegnazione caricata.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="lfas-pending-approvals-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title mb-1">Approvazioni in attesa</h5>
+                        <div class="small text-muted">Richieste di apprendimento o upgrade che richiedono revisione staff.</div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Personaggio</th>
+                                    <th>Abilita</th>
+                                    <th>Progressione</th>
+                                    <th class="text-end">Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lfas-pending-approvals-table"></tbody>
+                        </table>
+                    </div>
+                    <div id="lfas-pending-approvals-empty" class="small text-muted py-4 d-none">
+                        Nessuna approvazione in attesa.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="lfas-rank-rewards-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title mb-1">Premi punti da grado</h5>
+                        <div class="small text-muted">Gestisci i punti abilita assegnati automaticamente al cambio grado.</div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="lfas-rank-reward-form" class="row g-2 align-items-end mb-3" autocomplete="off" novalidate>
+                        <input type="hidden" name="id" value="0">
+                        <div class="col-12 col-md-3">
+                            <label class="form-label">Grado</label>
+                            <input type="number" class="form-control" name="rank" min="1" value="1">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Categoria punti</label>
+                            <select class="form-select" name="point_category_id" id="lfas-rank-reward-category-select">
+                                <option value="0">Seleziona...</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <label class="form-label">Punti</label>
+                            <input type="number" class="form-control" name="points" value="1">
+                        </div>
+                        <div class="col-12 col-md-2">
+                            <label class="form-label">Attiva</label>
+                            <select class="form-select" name="is_active">
+                                <option value="1">Si</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="col-12 d-flex flex-wrap gap-2">
+                            <button type="button" class="btn btn-sm btn-primary" data-action="lfas-rank-reward-save">Salva premio</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="lfas-rank-reward-reset">Reset</button>
+                        </div>
+                    </form>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Grado</th>
+                                    <th>Categoria</th>
+                                    <th>Punti</th>
+                                    <th>Stato</th>
+                                    <th class="text-end">Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lfas-rank-rewards-table"></tbody>
+                        </table>
+                    </div>
+                    <div id="lfas-rank-rewards-empty" class="small text-muted py-4 d-none">
+                        Nessun premio configurato.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="lfas-ability-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title mb-1" data-role="lfas-ability-modal-title">Nuova abilità</h5>
+                        <div class="small text-muted" data-role="lfas-ability-modal-subtitle">Definisci comportamento, effetto e metadati dell'abilità.</div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-light border small mb-3">
+                        Compila prima i dati base dell'abilita, poi salva. Se l'abilita richiede regole avanzate puoi riaprire la scheda o usare <b>Salva e continua</b>.
+                    </div>
+
+                    <form id="lfas-ability-form" class="row g-3" autocomplete="off" novalidate>
+                        <input type="hidden" name="id" value="0">
+
+                        <div class="col-12">
+                            <div class="card border-0 bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title mb-3">Identita dell'abilita</h6>
+                                    <div class="row g-3">
+                                        <div class="col-12 col-lg-5">
+                                            <label class="form-label">
+                                                Nome
+                                            </label>
+                                            <input type="text" class="form-control" name="name" maxlength="120" required>
+                                        </div>
+
+                                        <div class="col-12 col-lg-4">
+                                            <label class="form-label">
+                                                Slug
+                                            </label>
+                                            <input type="text" class="form-control" name="slug" maxlength="120" placeholder="Facoltativo">
+                                        </div>
+
+                                        <div class="col-12 col-lg-3">
+                                            <label class="form-label">
+                                                Tipo
+                                            </label>
+                                            <select class="form-select" name="type">
+                                                <option value="ability">Abilita</option>
+                                                <option value="spell">Incantesimo</option>
+                                                <option value="technique">Tecnica</option>
+                                                <option value="ritual">Rituale</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="form-label">
+                                                Descrizione
+                                            </label>
+                                            <textarea class="form-control" name="description" rows="3" maxlength="1000"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-xl-6">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h6 class="card-title mb-3">Uso in gioco</h6>
+                                    <div class="row g-3">
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">
+                                                Bersaglio
+                                            </label>
+                                            <select class="form-select" name="target_type">
+                                                <option value="self">Se stesso</option>
+                                                <option value="scene">Scena corrente</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">
+                                                Effetto immediato
+                                            </label>
+                                            <select class="form-select" name="effect_mode">
+                                                <option value="none">Nessuno</option>
+                                                <option value="apply_state">Applica stato</option>
+                                                <option value="remove_state">Rimuovi stato</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="form-label">
+                                                Stato narrativo
+                                            </label>
+                                            <select class="form-select" name="narrative_state_id" id="lfas-state-select">
+                                                <option value="0">Nessuno</option>
+                                            </select>
+                                            <div class="form-text" data-role="lfas-state-help">Richiesto solo per effetti che applicano o rimuovono uno stato.</div>
+                                        </div>
+
+                                        <div class="col-12 col-md-4">
+                                            <label class="form-label">
+                                                Recupero (sec)
+                                            </label>
+                                            <input type="number" class="form-control" name="cooldown_seconds" min="0" value="0">
+                                        </div>
+
+                                        <div class="col-12 col-md-4">
+                                            <label class="form-label">
+                                                Livello massimo
+                                            </label>
+                                            <input type="number" class="form-control" name="max_level" min="1" value="1">
+                                        </div>
+
+                                        <div class="col-12 col-md-4">
+                                            <label class="form-label">
+                                                Ordine
+                                            </label>
+                                            <input type="number" class="form-control" name="sort_order" value="100">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-xl-6">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h6 class="card-title mb-3">Progressione e visibilita</h6>
+                                    <div class="row g-3">
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">
+                                                Categoria punti
+                                            </label>
+                                            <select class="form-select" name="point_category_id" id="lfas-point-category-select">
+                                                <option value="0">Nessuna</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">
+                                                Stato record
+                                            </label>
+                                            <select class="form-select" name="is_active">
+                                                <option value="1">Attivo</option>
+                                                <option value="0">Disattivo</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">
+                                                Pubblica
+                                            </label>
+                                            <select class="form-select" name="is_public">
+                                                <option value="0">No</option>
+                                                <option value="1">Si</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">
+                                                Nascondi se bloccata
+                                            </label>
+                                            <select class="form-select" name="is_hidden_when_locked">
+                                                <option value="0">No</option>
+                                                <option value="1">Si</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">
+                                                Richiede apprendimento
+                                            </label>
+                                            <select class="form-select" name="requires_learning">
+                                                <option value="0">No</option>
+                                                <option value="1">Si</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">
+                                                Richiede approvazione
+                                            </label>
+                                            <select class="form-select" name="requires_staff_approval">
+                                                <option value="0">No</option>
+                                                <option value="1">Si</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="card border-0 bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title mb-3">Metadati e preset</h6>
+                                    <label class="form-label">
+                                        Metadata JSON
+                                    </label>
+                                    <textarea class="form-control font-monospace" name="metadata_json" rows="3" placeholder='{"ui_icon":"bi bi-stars"}'></textarea>
+                                    <div class="row g-2 mt-1">
+                                        <div class="col-12 col-lg-7">
+                                            <input
+                                                type="text"
+                                                class="form-control form-control-sm"
+                                                list="lfas-json-presets-ability"
+                                                data-role="lfas-json-preset-picker"
+                                                data-form-key="ability"
+                                                data-target-name="metadata_json"
+                                                placeholder="Preset guidato: ui_icon, ui_audio, combat_attack..."
+                                                autocomplete="off"
+                                            >
+                                        </div>
+                                        <div class="col-12 col-lg-5 d-flex flex-wrap gap-2">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="lfas-json-preset-apply" data-form-key="ability" data-target-name="metadata_json" data-preset="ui_icon">Icona UI</button>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="lfas-json-preset-apply" data-form-key="ability" data-target-name="metadata_json" data-preset="combat_attack">Attacco</button>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="lfas-json-preset-apply" data-form-key="ability" data-target-name="metadata_json" data-preset="magic_spell">Incantesimo</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-text">Usa un preset guidato e poi rifinisci il JSON solo se serve.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="border-top mt-4 pt-4" data-role="lfas-ability-rules-section">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                            <div>
+                                <h6 class="mb-0">Regole abilita</h6>
+                                <div class="small text-muted">Configura fonti di sblocco, requisiti ed effetti runtime.</div>
+                            </div>
+                            <div class="small text-muted" data-role="lfas-ability-rules-context">
+                                Salva prima l'abilita per configurare assegnazioni, requisiti ed effetti.
+                            </div>
+                        </div>
+
+                        <div class="alert alert-secondary small mb-3" data-role="lfas-ability-rules-empty">
+                            Salva prima l'abilita per configurare assegnazioni, requisiti ed effetti.
+                        </div>
+
+                        <div data-role="lfas-ability-rules-panels" class="d-none">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h6 class="mb-0">Assegnazioni automatiche</h6>
+                                            <div class="small text-muted">Definiscono quali fonti sbloccano l'abilita.</div>
+                                        </div>
+                                        <div class="card-body">
+                                            <form id="lfas-grant-form" class="row g-3" autocomplete="off" novalidate>
+                                                <input type="hidden" name="id" value="0">
+                                                <div class="col-12">
+                                                    <div class="small text-uppercase text-muted fw-semibold mb-1">1. Da dove arriva lo sblocco</div>
+                                                </div>
+                                                <div class="col-12 col-lg-4">
+                                                    <label class="form-label">Tipo di sorgente</label>
+                                                    <select class="form-select" name="source_type">
+                                                        <option value="character">Personaggio</option>
+                                                        <option value="archetype">Archetipo</option>
+                                                        <option value="guild">Gilda</option>
+                                                        <option value="custom">Personalizzato</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 col-md-4 col-lg-3">
+                                                    <label class="form-label">ID della sorgente</label>
+                                                    <input type="number" class="form-control" name="source_id" min="1" value="0">
+                                                </div>
+                                                <div class="col-12 col-lg-5">
+                                                    <label class="form-label">Sorgente guidata</label>
+                                                    <div class="position-relative" data-role="lfas-character-search-wrap">
+                                                        <input type="text" class="form-control" name="source_picker" list="lfas-grant-source-options" placeholder="Seleziona o cerca una sorgente..." autocomplete="off">
+                                                        <div id="lfas-grant-source-results" class="list-group position-absolute w-100 shadow-sm" style="z-index: 1060;"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-text mt-0" data-role="lfas-grant-source-id-help">Inserisci l'ID richiesto dal tipo selezionato, oppure usa la ricerca guidata quando disponibile.</div>
+                                                    <div class="form-text" data-role="lfas-grant-source-picker-help">Per archetipi e gilde puoi scegliere dalla lista; per gli altri tipi puoi lasciare vuoto.</div>
+                                                </div>
+                                                <div class="col-12 mt-2">
+                                                    <div class="small text-uppercase text-muted fw-semibold mb-1">2. Come si comporta la regola</div>
+                                                </div>
+                                                <div class="col-12 col-md-6 col-xl-4">
+                                                    <label class="form-label">Modalita di assegnazione</label>
+                                                    <select class="form-select" name="grant_mode">
+                                                        <option value="unlock">Sblocca</option>
+                                                        <option value="auto_learn">Apprendi automaticamente</option>
+                                                        <option value="bonus">Bonus</option>
+                                                        <option value="forbid">Vieta</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 col-md-6 col-xl-4">
+                                                    <label class="form-label">Comportamento quando la sorgente si perde</label>
+                                                    <select class="form-select" name="retention_policy">
+                                                        <option value="keep_when_lost">Mantieni alla perdita</option>
+                                                        <option value="while_source_active">Finche la sorgente e attiva</option>
+                                                        <option value="disable_when_lost">Disattiva alla perdita</option>
+                                                        <option value="refund_when_lost">Rimborsa alla perdita</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-6 col-md-4 col-xl-2">
+                                                    <label class="form-label">Stato della regola</label>
+                                                    <select class="form-select" name="is_active">
+                                                        <option value="1">Attiva</option>
+                                                        <option value="0">Disattiva</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-6 col-md-4 col-xl-2">
+                                                    <label class="form-label">Priorita</label>
+                                                    <input type="number" class="form-control" name="priority" value="100">
+                                                </div>
+                                                <div class="col-12 mt-2">
+                                                    <div class="small text-uppercase text-muted fw-semibold mb-1">3. Quando si applica</div>
+                                                </div>
+                                                <div class="col-6 col-md-4">
+                                                    <label class="form-label">Grado minimo</label>
+                                                    <input type="number" class="form-control" name="min_rank" min="0" value="0">
+                                                </div>
+                                                <div class="col-6 col-md-4">
+                                                    <label class="form-label">Grado massimo</label>
+                                                    <input type="number" class="form-control" name="max_rank" min="0" value="0">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <div class="form-text mt-md-4">Usa 0 per lasciare aperto il limite minimo o massimo.</div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="small text-uppercase text-muted fw-semibold mb-1">4. Metadati facoltativi</div>
+                                                    <label class="form-label">Metadata JSON</label>
+                                                    <input type="text" class="form-control font-monospace" name="metadata_json" placeholder='{"label":"Assassino"}'>
+                                                    <div class="row g-2 mt-1">
+                                                        <div class="col-12 col-lg-7">
+                                                            <input
+                                                                type="text"
+                                                                class="form-control form-control-sm"
+                                                                list="lfas-json-presets-grant"
+                                                                data-role="lfas-json-preset-picker"
+                                                                data-form-key="grant"
+                                                                data-target-name="metadata_json"
+                                                                placeholder="Preset guidato: label_only, label_hidden, rank_window..."
+                                                                autocomplete="off"
+                                                            >
+                                                        </div>
+                                                        <div class="col-12 col-lg-5 d-flex flex-wrap gap-2">
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="lfas-json-preset-apply" data-form-key="grant" data-target-name="metadata_json" data-preset="label_only">Label</button>
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="lfas-json-preset-apply" data-form-key="grant" data-target-name="metadata_json" data-preset="label_hidden">Label staff</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 d-flex flex-wrap gap-2">
+                                                    <button type="button" class="btn btn-sm btn-primary" data-action="lfas-grant-save">Salva regola</button>
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="lfas-grant-reset">Reset</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="card-body border-top p-0">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover align-middle mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Fonte</th>
+                                                            <th>Regola</th>
+                                                            <th>Grado</th>
+                                                            <th>Stato</th>
+                                                            <th class="text-end">Azioni</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="lfas-grants-table"></tbody>
+                                                </table>
+                                            </div>
+                                            <div id="lfas-grants-empty" class="small text-muted px-3 py-4 d-none">Nessuna assegnazione configurata.</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h6 class="mb-0">Requisiti</h6>
+                                            <div class="small text-muted">Condizioni per apprendere o usare l'abilita.</div>
+                                        </div>
+                                        <div class="card-body">
+                                            <form id="lfas-requirement-form" class="row g-3" autocomplete="off" novalidate>
+                                                <input type="hidden" name="id" value="0">
+                                                <div class="col-12">
+                                                    <div class="small text-uppercase text-muted fw-semibold mb-1">1. Cosa viene controllato</div>
+                                                </div>
+                                                <div class="col-12 col-md-3">
+                                                    <label class="form-label">Livello dell'abilita</label>
+                                                    <input type="number" class="form-control" name="level" min="1" value="1">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="form-label">Tipo di requisito</label>
+                                                    <select class="form-select" name="requirement_type">
+                                                        <option value="attribute">Attributo</option>
+                                                        <option value="rank">Grado</option>
+                                                        <option value="ability">Abilita</option>
+                                                        <option value="archetype">Archetipo</option>
+                                                        <option value="guild">Gilda</option>
+                                                        <option value="custom">Personalizzato</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 col-md-5">
+                                                    <label class="form-label">Chiave da verificare</label>
+                                                    <input type="text" class="form-control" name="requirement_key" maxlength="120" placeholder="strength" list="lfas-requirement-key-options" autocomplete="off">
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-text mt-0" data-role="lfas-requirement-key-help">Per gli attributi usa di norma lo slug, per esempio <code>strength</code>.</div>
+                                                </div>
+                                                <div class="col-12 mt-2">
+                                                    <div class="small text-uppercase text-muted fw-semibold mb-1">2. Come viene valutato</div>
+                                                </div>
+                                                <div class="col-6 col-md-3 col-lg-2">
+                                                    <label class="form-label">Operatore</label>
+                                                    <select class="form-select" name="operator">
+                                                        <option value=">=">>=</option>
+                                                        <option value=">">></option>
+                                                        <option value="=">=</option>
+                                                        <option value="!=">!=</option>
+                                                        <option value="<">&lt;</option>
+                                                        <option value="<=">&lt;=</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-6 col-md-3 col-lg-2">
+                                                    <label class="form-label">Valore richiesto</label>
+                                                    <input type="text" class="form-control" name="required_value" maxlength="255" placeholder="4">
+                                                </div>
+                                                <div class="col-12 col-lg-5">
+                                                    <label class="form-label">Comportamento se il requisito non e disponibile</label>
+                                                    <select class="form-select" name="policy_when_unavailable">
+                                                        <option value="block">Blocca</option>
+                                                        <option value="ignore">Ignora</option>
+                                                        <option value="hide">Nascondi</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-6 col-md-3 col-lg-3">
+                                                    <label class="form-label">Mostra il requisito al player</label>
+                                                    <select class="form-select" name="is_hidden">
+                                                        <option value="0">Si, visibile</option>
+                                                        <option value="1">No, nascosto</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-6 col-md-3 col-lg-2">
+                                                    <label class="form-label">Stato della regola</label>
+                                                    <select class="form-select" name="is_active">
+                                                        <option value="1">Attiva</option>
+                                                        <option value="0">Disattiva</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="small text-uppercase text-muted fw-semibold mb-1">3. Metadati facoltativi</div>
+                                                    <label class="form-label">Metadata JSON</label>
+                                                    <input type="text" class="form-control font-monospace" name="metadata_json" placeholder='{"note":"Req opzionale"}'>
+                                                    <div class="row g-2 mt-1">
+                                                        <div class="col-12 col-lg-7">
+                                                            <input
+                                                                type="text"
+                                                                class="form-control form-control-sm"
+                                                                list="lfas-json-presets-requirement"
+                                                                data-role="lfas-json-preset-picker"
+                                                                data-form-key="requirement"
+                                                                data-target-name="metadata_json"
+                                                                placeholder="Preset guidato: note_optional, hidden_requirement..."
+                                                                autocomplete="off"
+                                                            >
+                                                        </div>
+                                                        <div class="col-12 col-lg-5 d-flex flex-wrap gap-2">
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="lfas-json-preset-apply" data-form-key="requirement" data-target-name="metadata_json" data-preset="note_optional">Nota</button>
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="lfas-json-preset-apply" data-form-key="requirement" data-target-name="metadata_json" data-preset="hidden_requirement">Nascosto</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 d-flex flex-wrap gap-2">
+                                                    <button type="button" class="btn btn-sm btn-primary" data-action="lfas-requirement-save">Salva requisito</button>
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="lfas-requirement-reset">Reset</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="card-body border-top p-0">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover align-middle mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Livello</th>
+                                                            <th>Requisito</th>
+                                                            <th>Policy</th>
+                                                            <th>Stato</th>
+                                                            <th class="text-end">Azioni</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="lfas-requirements-table"></tbody>
+                                                </table>
+                                            </div>
+                                            <div id="lfas-requirements-empty" class="small text-muted px-3 py-4 d-none">Nessun requisito configurato.</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h6 class="mb-0">Effetti</h6>
+                                            <div class="small text-muted">Effetti attivi o passivi prodotti dall'abilita.</div>
+                                        </div>
+                                        <div class="card-body">
+                                            <form id="lfas-effect-form" class="row g-3" autocomplete="off" novalidate>
+                                                <input type="hidden" name="id" value="0">
+                                                <div class="col-12">
+                                                    <div class="small text-uppercase text-muted fw-semibold mb-1">1. Che effetto produce</div>
+                                                </div>
+                                                <div class="col-12 col-md-3">
+                                                    <label class="form-label">Livello dell'abilita</label>
+                                                    <input type="number" class="form-control" name="level" min="1" value="1">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="form-label">Tipo di effetto</label>
+                                                    <select class="form-select" name="effect_type">
+                                                        <option value="modifier">Modificatore</option>
+                                                        <option value="narrative_state">Stato narrativo</option>
+                                                        <option value="custom">Personalizzato</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 col-md-5">
+                                                    <label class="form-label">Sistema bersaglio</label>
+                                                    <input type="text" class="form-control" name="target_system" maxlength="80" placeholder="character_attributes" list="lfas-effect-target-system-options" autocomplete="off">
+                                                </div>
+                                                <div class="col-12 col-md-8">
+                                                    <label class="form-label">Chiave del bersaglio</label>
+                                                    <input type="text" class="form-control" name="target_key" maxlength="120" placeholder="strength" list="lfas-effect-target-key-options" autocomplete="off">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="form-label">Operazione</label>
+                                                    <select class="form-select" name="operation">
+                                                        <option value="add">Aggiungi</option>
+                                                        <option value="apply">Applica</option>
+                                                        <option value="remove">Rimuovi</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-text mt-0" data-role="lfas-effect-target-key-help">Per gli effetti sugli attributi usa lo slug dell'attributo, per esempio <code>strength</code>.</div>
+                                                </div>
+                                                <div class="col-12 mt-2">
+                                                    <div class="small text-uppercase text-muted fw-semibold mb-1">2. Quando resta attivo</div>
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="form-label">Valore applicato</label>
+                                                    <input type="number" step="0.01" class="form-control" name="value" value="0">
+                                                </div>
+                                                <div class="col-12 col-lg-5">
+                                                    <label class="form-label">Attivazione dell'effetto</label>
+                                                    <select class="form-select" name="activation_policy">
+                                                        <option value="while_ability_usable">Finche utilizzabile</option>
+                                                        <option value="while_ability_learned">Finche appresa</option>
+                                                        <option value="on_use">All'uso</option>
+                                                        <option value="manual_toggle">Attivazione manuale</option>
+                                                        <option value="temporary">Temporaneo</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 col-lg-4">
+                                                    <label class="form-label">Comportamento se il sistema non e disponibile</label>
+                                                    <select class="form-select" name="policy_when_unavailable">
+                                                        <option value="ignore">Ignora</option>
+                                                        <option value="block">Blocca</option>
+                                                        <option value="hide">Nascondi</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-6 col-md-3 col-lg-2">
+                                                    <label class="form-label">Stato della regola</label>
+                                                    <select class="form-select" name="is_active">
+                                                        <option value="1">Attiva</option>
+                                                        <option value="0">Disattiva</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="small text-uppercase text-muted fw-semibold mb-1">3. Metadati facoltativi</div>
+                                                    <label class="form-label">Metadata JSON</label>
+                                                    <input type="text" class="form-control font-monospace" name="metadata_json" placeholder='{"label":"Bonus Forza"}'>
+                                                    <div class="row g-2 mt-1">
+                                                        <div class="col-12 col-lg-7">
+                                                            <input
+                                                                type="text"
+                                                                class="form-control form-control-sm"
+                                                                list="lfas-json-presets-effect"
+                                                                data-role="lfas-json-preset-picker"
+                                                                data-form-key="effect"
+                                                                data-target-name="metadata_json"
+                                                                placeholder="Preset guidato: attribute_bonus, passive_aura, temporary_buff..."
+                                                                autocomplete="off"
+                                                            >
+                                                        </div>
+                                                        <div class="col-12 col-lg-5 d-flex flex-wrap gap-2">
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="lfas-json-preset-apply" data-form-key="effect" data-target-name="metadata_json" data-preset="attribute_bonus">Bonus</button>
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="lfas-json-preset-apply" data-form-key="effect" data-target-name="metadata_json" data-preset="temporary_buff">Temporaneo</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 d-flex flex-wrap gap-2">
+                                                    <button type="button" class="btn btn-sm btn-primary" data-action="lfas-effect-save">Salva effetto</button>
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="lfas-effect-reset">Reset</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="card-body border-top p-0">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover align-middle mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Livello</th>
+                                                            <th>Effetto</th>
+                                                            <th>Attivazione</th>
+                                                            <th>Stato</th>
+                                                            <th class="text-end">Azioni</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="lfas-effects-table"></tbody>
+                                                </table>
+                                            </div>
+                                            <div id="lfas-effects-empty" class="small text-muted px-3 py-4 d-none">Nessun effetto configurato.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="lfas-ability-delete-current">Elimina</button>
+                    <div class="d-flex gap-2 ms-auto">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Chiudi</button>
+                        <button type="button" class="btn btn-outline-primary" data-action="lfas-ability-save-continue">Salva e continua</button>
+                        <button type="button" class="btn btn-primary" data-action="lfas-ability-save">Salva e chiudi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <datalist id="lfas-json-presets-ability">
+        <option value="ui_icon">Icona UI</option>
+        <option value="ui_audio">Audio UI</option>
+        <option value="combat_attack">Attacco combattimento</option>
+        <option value="magic_spell">Incantesimo</option>
+    </datalist>
+    <datalist id="lfas-json-presets-grant">
+        <option value="label_only">Solo label</option>
+        <option value="label_hidden">Label staff / nascosta</option>
+        <option value="rank_window">Finestra grado</option>
+    </datalist>
+    <datalist id="lfas-json-presets-requirement">
+        <option value="note_optional">Nota opzionale</option>
+        <option value="hidden_requirement">Requisito nascosto</option>
+        <option value="staff_hint">Hint staff</option>
+    </datalist>
+    <datalist id="lfas-json-presets-effect">
+        <option value="attribute_bonus">Bonus attributo</option>
+        <option value="passive_aura">Aura passiva</option>
+        <option value="temporary_buff">Buff temporaneo</option>
+    </datalist>
+    <datalist id="lfas-grant-source-options"></datalist>
+    <datalist id="lfas-requirement-key-options"></datalist>
+    <datalist id="lfas-effect-target-system-options">
+        <option value="character_attributes">Attributi personaggio</option>
+        <option value="narrative_states">Stati narrativi</option>
+        <option value="custom">Personalizzato</option>
+    </datalist>
+    <datalist id="lfas-effect-target-key-options"></datalist>
+
+    <div class="modal fade" id="lfas-assignment-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title mb-1">Nuova assegnazione</h5>
+                        <div class="small text-muted">Collega un'abilita esistente a un personaggio.</div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="lfas-assignment-form" class="row g-3" autocomplete="off" novalidate>
+                        <div class="col-12">
+                            <div data-role="lfas-character-search-wrap">
+                                <label class="form-label" for="lfas-assignment-character-search">Personaggio</label>
+                                <input type="text" class="form-control" id="lfas-assignment-character-search" name="character_label" maxlength="120" placeholder="Cerca nome o cognome..." required>
+                                <input type="hidden" name="character_id" value="">
+                                <div id="lfas-assignment-character-results" class="list-group small mt-2"></div>
+                                <div class="form-text">L'ID viene valorizzato automaticamente quando selezioni il personaggio.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Abilita</label>
+                            <select class="form-select" name="ability_id" id="lfas-assignment-ability-select" required>
+                                <option value="">Seleziona...</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Ordine</label>
+                            <input type="number" class="form-control" name="sort_order" value="100">
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Stato record</label>
+                            <select class="form-select" name="is_active">
+                                <option value="1">Attivo</option>
+                                <option value="0">Disattivo</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Stato</label>
+                            <select class="form-select" name="status">
+                                <option value="learned">Appresa</option>
+                                <option value="available">Disponibile</option>
+                                <option value="learning">In apprendimento</option>
+                                <option value="pending_approval">In approvazione</option>
+                                <option value="suspended">Sospesa</option>
+                                <option value="disabled">Disattivata</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Livello</label>
+                            <input type="number" class="form-control" name="level" min="0" value="1">
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Approvazione</label>
+                            <select class="form-select" name="approval_status">
+                                <option value="approved">Approvata</option>
+                                <option value="pending">In attesa</option>
+                                <option value="rejected">Respinta</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="button" class="btn btn-primary" data-action="lfas-assignment-save">Salva assegnazione</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

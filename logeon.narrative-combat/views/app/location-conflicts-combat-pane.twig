@@ -1,0 +1,205 @@
+<section id="location-conflicts-pane-combat" class="mt-4">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="mb-0">Combattimento narrativo</h6>
+                <div class="small text-muted">Modulo opzionale Tier 1 + Tier 2 sopra il sistema conflitti.</div>
+            </div>
+            <span class="badge text-bg-dark" id="location-combat-tier-badge">Tier 2</span>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-12 col-xl-4">
+                    <div class="mb-2">
+                        <label class="form-label">Conflitto</label>
+                        <select class="form-select form-select-sm" id="location-combat-conflict-id">
+                            <option value="">Nessun conflitto disponibile</option>
+                        </select>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2 mb-2">
+                        <button type="button" class="btn btn-sm btn-outline-primary" data-action="location-combat-load">Carica stato</button>
+                        <button type="button" class="btn btn-sm btn-outline-success" data-action="location-combat-start">Avvia contesto</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-action="location-combat-sync">Sincronizza partecipanti</button>
+                    </div>
+                    <div class="small text-muted mb-3" id="location-combat-selected-conflict">Conflitto selezionato: -</div>
+
+                    <hr>
+
+                    <div class="mb-2">
+                        <label class="form-label">Azione</label>
+                        <select class="form-select form-select-sm" id="location-combat-action-type">
+                            <option value="">Seleziona azione...</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Modalita bersaglio</label>
+                        <select class="form-select form-select-sm" id="location-combat-target-mode">
+                            <option value="self">Se stesso</option>
+                            <option value="character">Personaggio</option>
+                            <option value="multiple">Multiplo</option>
+                        </select>
+                    </div>
+                    <div class="mb-2 d-none" id="location-combat-target-character-wrap">
+                        <label class="form-label">Bersaglio primario</label>
+                        <select class="form-select form-select-sm" id="location-combat-target-character-id">
+                            <option value="">Seleziona personaggio...</option>
+                        </select>
+                    </div>
+                    <div class="mb-2 d-none" id="location-combat-target-team-wrap">
+                        <label class="form-label">Squadra</label>
+                        <select class="form-select form-select-sm" id="location-combat-target-team-key">
+                            <option value="">Seleziona squadra...</option>
+                        </select>
+                    </div>
+                    <div class="mb-2 d-none" id="location-combat-target-multi-wrap">
+                        <label class="form-label">Bersagli multipli</label>
+                        <div class="border rounded p-2" id="location-combat-target-multi-list">
+                            <div class="small text-muted">Nessun personaggio disponibile.</div>
+                        </div>
+                    </div>
+                    <div class="small text-muted mb-2" id="location-combat-target-preview">Target selezionato: Se stesso</div>
+                    <div class="d-grid">
+                        <button type="button" class="btn btn-sm btn-primary" data-action="location-combat-declare">Dichiara azione</button>
+                    </div>
+                </div>
+
+                <div class="col-12 col-xl-8">
+                    <div class="alert alert-secondary py-2 mb-3" id="location-combat-summary">
+                        Seleziona un conflitto per vedere lo stato di combattimento.
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-6">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Azioni pendenti</h6>
+                                </div>
+                                <div class="card-body p-2">
+                                    <div id="location-combat-pending" class="list-group list-group-flush"></div>
+                                    <div id="location-combat-pending-empty" class="small text-muted">Nessuna azione in attesa.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Timeline meccanica</h6>
+                                </div>
+                                <div class="card-body p-2">
+                                    <div id="location-combat-timeline" class="list-group list-group-flush"></div>
+                                    <div id="location-combat-timeline-empty" class="small text-muted">Nessuna risoluzione registrata.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="mb-0">Strati avanzati</h6>
+                            <span class="badge text-bg-info d-none" id="location-combat-tier2-badge">Tier 2+</span>
+                        </div>
+                        <div class="small text-muted mb-2" id="location-combat-tier2-empty">
+                            Il contesto avanzato comparira quando il conflitto avra uno stato di combattimento disponibile.
+                        </div>
+                        <div id="location-combat-tier2-content" class="d-none">
+                            <div class="row g-3">
+                                <div class="col-12 col-lg-6">
+                                    <div class="border rounded p-2">
+                                        <div class="small text-muted">Fase</div>
+                                        <div><b id="location-combat-phase-label">-</b></div>
+                                        <div class="small text-muted" id="location-combat-phase-cue">-</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    <div class="border rounded p-2">
+                                        <div class="small text-muted">Indicatori</div>
+                                        <div class="d-flex flex-wrap gap-1" id="location-combat-indicators"></div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    <div class="border rounded p-2">
+                                        <div class="small text-muted">Momentum</div>
+                                        <div><b id="location-combat-momentum-holder">-</b></div>
+                                        <div class="small text-muted" id="location-combat-momentum-cue">-</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    <div class="border rounded p-2">
+                                        <div class="small text-muted">Escalation</div>
+                                        <div><b id="location-combat-escalation-label">-</b></div>
+                                        <div class="small text-muted" id="location-combat-escalation-cue">-</div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="border rounded p-2">
+                                        <div class="small text-muted">Lati</div>
+                                        <div id="location-combat-sides">-</div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="border rounded p-2">
+                                        <div class="small text-muted">Metriche sintetiche</div>
+                                        <div id="location-combat-side-metrics">-</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    <div class="border rounded p-2">
+                                        <div class="small text-muted">Guardie</div>
+                                        <ul class="small mb-0 ps-3" id="location-combat-guards"></ul>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    <div class="border rounded p-2">
+                                        <div class="small text-muted">Ambiente</div>
+                                        <div id="location-combat-environment">-</div>
+                                        <div class="small text-muted mt-1" id="location-combat-environment-raw"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="location-combat-tier2-controls" class="d-none">
+                            <div class="row g-2 mt-2">
+                                <div class="col-12 col-md-6">
+                                    <select class="form-select form-select-sm" id="location-combat-guard-guardian-id">
+                                        <option value="">Guardiano</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <select class="form-select form-select-sm" id="location-combat-guard-protected-id">
+                                        <option value="">Protetto</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <input type="number" class="form-control form-control-sm" id="location-combat-guard-upkeep" value="5" min="0" max="50">
+                                </div>
+                                <div class="col-12 col-md-9 d-flex gap-2">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="location-combat-guard-add">Aggiungi guardia</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="location-combat-guard-remove">Rimuovi guardia</button>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <input type="number" class="form-control form-control-sm" id="location-combat-env-visibility" value="10" min="0" max="10" placeholder="Visibilita">
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <input type="number" class="form-control form-control-sm" id="location-combat-env-mobility" value="10" min="0" max="10" placeholder="Mobilita">
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <input type="number" class="form-control form-control-sm" id="location-combat-env-hazard" value="0" min="0" max="10" placeholder="Pericolo">
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <input type="number" class="form-control form-control-sm" id="location-combat-env-cover" value="0" min="0" max="10" placeholder="Copertura">
+                                </div>
+                                <div class="col-12">
+                                    <textarea class="form-control form-control-sm" id="location-combat-env-notes" rows="2" placeholder="Note ambientali"></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="location-combat-env-save">Salva ambiente</button>
+                                </div>
+                            </div>
+                        </div>
+                        {{ slot('game.location.conflicts.combat.tier3.after') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

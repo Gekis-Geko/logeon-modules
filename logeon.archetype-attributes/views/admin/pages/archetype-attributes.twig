@@ -1,0 +1,145 @@
+<div class="mt-3" data-admin-page="archetype-attributes">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <header>
+            <h4 class="display-6 mb-1">Archetipi e attributi</h4>
+            <h6 class="mb-0">Regole additive tra archetipi e attributi personaggio, senza alterare i moduli core.</h6>
+        </header>
+        <div class="d-flex flex-wrap gap-2">
+            <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-archetype-attributes-reload">
+                <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+            </button>
+            <button type="button" class="btn btn-sm btn-primary" data-action="admin-archetype-attributes-create">
+                <i class="bi bi-plus-lg me-1"></i>Nuova regola
+            </button>
+        </div>
+    </div>
+
+    <div class="alert alert-secondary py-2 small mb-3">
+        Usa questo pannello per definire valori fissi, minimi, massimi, bonus o suggerimenti applicati agli attributi quando un personaggio appartiene a un archetipo.
+    </div>
+
+    <div id="grid-admin-archetype-attributes"></div>
+
+    <div class="modal fade" id="admin-archetype-attributes-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title mb-1" data-role="admin-archetype-attributes-modal-title">Nuova regola</h5>
+                        <div class="small text-muted" data-role="admin-archetype-attributes-modal-subtitle">Configura il comportamento dell'attributo per l'archetipo selezionato.</div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="admin-archetype-attributes-form" class="row g-3" autocomplete="off" novalidate>
+                        <input type="hidden" name="id" value="0">
+
+                        <div class="col-12">
+                            <div class="card border-0 bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title mb-3">1. Collegamento tra archetipo e attributo</h6>
+                                    <div class="row g-3">
+                                        <div class="col-12 col-lg-6">
+                                            <label for="admin-archetype-attributes-archetype" class="form-label">Archetipo</label>
+                                            <select id="admin-archetype-attributes-archetype" name="archetype_id" class="form-select">
+                                                <option value="">Seleziona archetipo</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-lg-6">
+                                            <label for="admin-archetype-attributes-attribute" class="form-label">Attributo</label>
+                                            <select id="admin-archetype-attributes-attribute" name="attribute_id" class="form-select">
+                                                <option value="">Seleziona attributo</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-xl-7">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h6 class="card-title mb-3">2. Effetto della regola</h6>
+                                    <div class="row g-3">
+                                        <div class="col-12 col-md-6">
+                                            <label for="admin-archetype-attributes-rule-type" class="form-label">Tipo di regola</label>
+                                            <select id="admin-archetype-attributes-rule-type" name="rule_type" class="form-select">
+                                                <option value="">Seleziona tipo regola</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <label for="admin-archetype-attributes-value" class="form-label">Valore applicato</label>
+                                            <input
+                                                id="admin-archetype-attributes-value"
+                                                name="value"
+                                                type="text"
+                                                class="form-control"
+                                                placeholder="Es. 5 o +2"
+                                            >
+                                        </div>
+
+                                        <div class="col-12">
+                                            <div class="form-text mt-0" data-role="admin-archetype-attributes-value-help">
+                                                Inserisci un valore numerico o testuale in base al tipo regola.
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <label for="admin-archetype-attributes-enforced" class="form-label">Peso della regola</label>
+                                            <select id="admin-archetype-attributes-enforced" name="is_enforced" class="form-select">
+                                                <option value="0">Informativa</option>
+                                                <option value="1">Vincolante</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <label for="admin-archetype-attributes-priority" class="form-label">Priorita di valutazione</label>
+                                            <input
+                                                id="admin-archetype-attributes-priority"
+                                                name="priority"
+                                                type="number"
+                                                class="form-control"
+                                                value="100"
+                                            >
+                                            <div class="form-text">Le regole con priorita piu alta vengono valutate prima.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-xl-5">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h6 class="card-title mb-3">3. Note e contesto</h6>
+                                    <label for="admin-archetype-attributes-notes" class="form-label">Note della regola</label>
+                                    <textarea
+                                        id="admin-archetype-attributes-notes"
+                                        name="notes"
+                                        class="form-control"
+                                        rows="7"
+                                        placeholder="Contesto staff, note per il giocatore o dettagli della regola"
+                                    ></textarea>
+                                    <div class="form-text">Usa questo spazio per spiegare il perche della regola o eventuali eccezioni narrative.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="admin-archetype-attributes-delete-current">
+                        Elimina
+                    </button>
+                    <div class="d-flex gap-2 ms-auto">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Chiudi</button>
+                        <button type="button" class="btn btn-primary" data-action="admin-archetype-attributes-save">
+                            Salva regola
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,64 @@
+<div class="mt-3" data-admin-page="narrative-combat">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <header>
+            <h4 class="display-6 mb-1">Combattimento Narrativo</h4>
+            <h6 class="mb-0">Scegli la profondità del modulo di combattimento narrativo per il tuo gioco.</h6>
+        </header>
+        <button type="button" class="btn btn-sm btn-outline-primary" data-action="narrative-combat-settings-reload">
+            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+        </button>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-12 col-xl-5">
+            <div class="card h-100">
+                <div class="card-header"><strong>Profondità modulo</strong></div>
+                <div class="card-body">
+                    <form data-role="narrative-combat-settings-form" class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label">Modalità attiva</label>
+                            <select class="form-select" name="combat_depth">
+                                <option value="1">Tier 1</option>
+                                <option value="2">Tier 2</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <div class="small text-muted" data-role="narrative-combat-settings-description">
+                                Caricamento descrizione...
+                            </div>
+                        </div>
+                        <div class="col-12 d-none" data-role="narrative-combat-tier-lock-wrap">
+                            <div class="alert alert-warning py-2 mb-0" data-role="narrative-combat-tier-lock-message">
+                                Tier 2 forzato da una estensione avanzata attiva.
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex gap-2">
+                            <button type="button" class="btn btn-primary" data-action="narrative-combat-settings-save">Salva impostazione</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-7">
+            <div class="card h-100">
+                <div class="card-header"><strong>Confronto rapido</strong></div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="fw-semibold">Tier 1</div>
+                        <div class="small text-muted">Combattimento piu leggero: stamina, fatica, azioni base, effetti narrativi e risoluzione essenziale.</div>
+                    </div>
+                    <div>
+                        <div class="fw-semibold">Tier 2</div>
+                        <div class="small text-muted">Aggiunge momentum, escalation, metriche sintetiche, protezioni di gruppo e contesto ambientale.</div>
+                    </div>
+                    <hr>
+                    <div class="small">
+                        Tier effettivo attuale:
+                        <span class="badge text-bg-dark" data-role="narrative-combat-effective-tier">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
